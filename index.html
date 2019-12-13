@@ -1,14 +1,47 @@
 <html lang="en">
+
 <head>
   <meta charset="utf-8">
-  <title>systatus</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <link rel="stylesheet" href="css/Chart.min.css">
   <link rel="stylesheet" href="css/bootstrap.min.css">
+
+  <title>systatus</title>
 </head>
+
 <body>
+  <div class="container-fluid container-md">
+    <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="#memory">Memory</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#temperatures">Temperatures</a>
+        </li>
+      </ul>
+    </nav>
+    <div id="memory" class="card">
+      <div class="card-header">
+        <h5>Memory</h5>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-3">
+              <table id="mem-table" class="table table-sm small">
+              </table>
+          </div>
+          <div class="col-md-9">
+              <canvas id="memoryGraph" class="col-md-12"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script src="js/Chart.min.js"></script>
-  <script src="js/jquery-3.4.1.slim.min.js"></script>
+  <script src="js/jquery-3.4.1.min.js"></script>
   <script src="js/bl.js"></script>
-  <canvas id="myChart" width="400" height="400"></canvas>
 </body>
+
 </html>
