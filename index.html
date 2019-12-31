@@ -1,3 +1,4 @@
+<!doctype html>
 <html lang="en">
 
 <head>
@@ -6,42 +7,25 @@
   <link rel="stylesheet" href="css/Chart.min.css">
   <link rel="stylesheet" href="css/bootstrap.min.css">
 
+  <script src="js/angular.min.js"></script>
+  <script src="js/Chart.min.js"></script>
+  <script src="js/lineGraph.js"></script>
+  <script src="js/ApiService.js"></script>
+  <script src="js/memory.js"></script>
+  <script src="js/bl.js"></script>
+
   <title>systatus</title>
 </head>
 
 <body>
   <div class="container-fluid container-md">
     <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
-      <ul class="navbar-nav mr-auto">
-        <li class="nav-item">
-          <a class="nav-link" href="#memory">Memory</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#temperatures">Temperatures</a>
-        </li>
+      <ul id="navbar-items" class="navbar-nav mr-auto">
       </ul>
     </nav>
-    <div id="memory" class="card">
-      <div class="card-header">
-        <h5>Memory</h5>
-      </div>
-      <div class="card-body">
-        <div class="row">
-          <div class="col-md-3">
-              <table id="mem-table" class="table table-sm small">
-              </table>
-          </div>
-          <div class="col-md-9">
-              <canvas id="memoryGraph" class="col-md-12"></canvas>
-          </div>
-        </div>
-      </div>
+    <div id="content">
     </div>
   </div>
-
-  <script src="js/Chart.min.js"></script>
-  <script src="js/jquery-3.4.1.min.js"></script>
-  <script src="js/bl.js"></script>
 </body>
 
 </html>

@@ -1,0 +1,26 @@
+<div class="card-header">
+    <h5>Memory</h5>
+</div>
+<div class="card-body">
+    <div class="row">
+        <div class="col-md-3">
+            <table class="table table-sm small">
+                <tr ng-repeat="(key, val) in data.memory">
+                    <th>{{key}}</th>
+                    <td>{{val}}</td>
+                </tr>
+            </table>
+        </div>
+        <div class="col-md-9">
+            <div class="row">
+                <canvas line-graph class="col-md-12"></canvas>
+            </div>
+            <div class="row">
+                <div class="col-md-12 clearfix">
+                    <button ng-if="(data.stop)" ng-click="start()" type="button" class="btn btn-success float-right">Start</button>
+                    <button ng-if="(!data.stop)" ng-click="stop()" type="button" class="btn btn-danger float-right">Stop</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
