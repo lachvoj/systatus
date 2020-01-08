@@ -1,42 +1,28 @@
-"use strict";
-
-class ConfigItem {
-    constructor(cl, enabled, options) {
-        this.cl = cl;
-        this.enabled = enabled;
-        this.options = options;
-        this.instance = null;
-    }
-}
-
-var config = {
-    memory: new ConfigItem(Memory, true, {
-        interval: 1000,
-        limit: 120
-    }),
-    temperature: new ConfigItem(Temperature, true)
-};
+'use strict';
 
 const scopeName = '$scope';
 const elementName = '$element';
-const intervalServiceName = '$interval'
+const intervalName = '$interval'
 const appName = 'app';
 const apiServiceName = 'api';
+const configName = 'config';
+
+class Config {
+    constructor() {
+        this.interval = 1000;
+        this.limit = 120;
+    }
+}
 
 window.onload = function () {
     const appName = 'systatus';
     var module = angular.module(appName, []);
 
-    module.service(apiServiceName, ['$http', ApiService]);
+    module.service(apiServiceName, ['$http', '$timeout', configName, ApiService]);
+    module.service(configName, [Config]);
     new LineGraph(module);
-
-    var configKeys = Object.keys(config);
-    for (var i = 0; i < configKeys.length; i++) {
-        let configItem = config[configKeys[i]];
-        if (configItem.enabled) {
-            configItem.instance = new configItem.cl(module, configItem);
-        }
-    }
+    new Memory(module);
+    new Temperature(module);
 
     angular.bootstrap(document, [appName]);
 };

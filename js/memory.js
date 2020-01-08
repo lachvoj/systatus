@@ -1,6 +1,14 @@
+"use strict";
+
+class Memory extends CardBase {
+    constructor(module) {
+        super ('memory', 'template1', module, MemoryController);
+    }
+}
+
 class MemoryController extends ControllerBase {
-    constructor(scope, apiService, intervalService) {
-        super('memory', scope, apiService, intervalService);
+    constructor(scope, apiService, config) {
+        super('memory', scope, apiService, config);
         this.scope.chartOptions = new ChartOptions({
             yMin: 0,
             yMax: 100,
@@ -32,12 +40,7 @@ class MemoryController extends ControllerBase {
         }
         this.scope.chartData.labels.push(getHHMMSSTimestamp());
         this.scope.chartData.datasets[0].data.push(apiData.memory['percent']);
-        super.transformApiData();
-    }
-}
 
-class Memory extends CardBase {
-    constructor(module, config) {
-        super ('memory', 'template1', module, MemoryController);
+        super.transformApiData();
     }
 }

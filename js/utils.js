@@ -1,4 +1,4 @@
-
+'use strict';
 
 function bytesToHumanReadable(bytes, si) {
     var thresh = si ? 1000 : 1024;
@@ -106,14 +106,12 @@ class ChartOptions {
 }
 
 class ControllerBase {
-    constructor(name, scope, apiService, intervalService) {
+    constructor(name, scope, apiService, config) {
         this.scope = scope;
         this.scope.name = name;
         this.scope.upperName = capitalizeFirst(name);
-        this.apiService = apiService;
-        this.intervalService = intervalService;
         this.options = {
-            limit: 120
+            limit: config.limit
         };
         this.scope.apiStop = true;
         this.scope.tableData = {};
@@ -123,28 +121,25 @@ class ControllerBase {
         }
         this.scope.stop = this.stop.bind(this);
         this.scope.start = this.start.bind(this);
+
+        var self = this;
+        apiService.registerEndpoint({
+            scope: self.scope,
+            successCB: function(response) {
+                self.transformApiData(response.data);
+            },
+            errorCB: function(error) {
+                console.log(error);
+            }
+        });
     }
 
     stop() {
-        if (!this.interval)
-            return;
-
         this.scope.apiStop = true;
-        this.intervalService.cancel(this.interval);
-        this.interval = null;
     }
 
     start() {
-        if (this.interval)
-            return;
-
         this.scope.apiStop = false;
-        var self = this;
-        this.interval = this.intervalService(function () {
-            self.apiService.getData('/systatus/api/' + self.scope.name).then(function successCB(response) {
-                self.transformApiData(response.data);
-            }, function errorCB(response) { });
-        }, this.options.interval | 1000);
     }
 
     transformApiData(apiData) {
@@ -168,7 +163,7 @@ class CardBase {
         this.upperName = capitalizeFirst(name);
         angular.element(document.getElementById('navbar-items')).append('<li class="nav-item"><a class="nav-link" href="#' + this.name + '">' + this.upperName + '</a></li>');
         angular.element(document.getElementById('content')).append('<div ' + this.name + ' id="' + this.name + '" class="card"></div>');
-        module.controller(this.name, [scopeName, apiServiceName, intervalServiceName, controller]);
+        module.controller(this.name, [scopeName, apiServiceName, configName, controller]);
         module.directive(this.name, function () {
             return {
                 transclude: true,

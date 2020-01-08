@@ -1,6 +1,14 @@
+'use strict';
+
+class Temperature extends CardBase {
+    constructor(module, config) {
+        super('temperature', 'template1', module, TemperatureController);
+    }
+}
+
 class TemperatureController extends ControllerBase {
-    constructor(scope, apiService, intervalService) {
-        super('temperature', scope, apiService, intervalService)
+    constructor(scope, apiService, config) {
+        super('temperature', scope, apiService, config)
         this.scope.chartOptions = new ChartOptions({
             yUnit: '°C'
         });
@@ -49,11 +57,5 @@ class TemperatureController extends ControllerBase {
             }
         }
         super.transformApiData();
-    }
-}
-
-class Temperature extends CardBase {
-    constructor(module, config) {
-        super('temperature', 'template1', module, TemperatureController);
     }
 }
