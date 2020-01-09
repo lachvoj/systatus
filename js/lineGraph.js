@@ -1,22 +1,45 @@
 class LineGraphController {
-    constructor(scope, element) {
+    constructor(scope, element, attrs) {
         var self = this;
         this.scope = scope;
-        if (!scope.$parent.chartData || !scope.$parent.chartOptions)
-        {
+
+        let chartDataName = element.attr('chart-data');
+        if (!chartDataName || !scope.$parent[chartDataName]) {
+            chartDataName = 'chartData';
+        }
+        if (!scope.$parent[chartDataName]) {
             return;
         }
         this.scope.data = scope.$parent.chartData;
-        this.scope.options = scope.$parent.chartOptions;
-        this.ctx = element[0].getContext('2d');
+
+        if (scope.$parent.chartOptions) {
+            this.scope.options = new ChartOptions(scope.$parent.chartOptions);
+        }
+        else {
+            this.scope.options = new ChartOptions({});
+        }
+
+        this.scope.zoom = false;
+
+        this.ctx = element.find('canvas')[0].getContext('2d');
         this.chart = new Chart(this.ctx, {
             type: 'line',
             data: scope.data,
             options: scope.options
         });
-        this.scope.$watchCollection('data.labels', function() {
+        this.scope.$watchCollection('data.labels', function () {
             self.onUpdate();
         });
+        this.scope.toggleStart = this.toggleStart.bind(this);
+        this.scope.toggleZoom = this.toggleZoom.bind(this);
+    }
+
+    toggleStart() {
+        this.scope.$parent.apiStop = !this.scope.$parent.apiStop;
+    }
+
+    toggleZoom() {
+        this.scope.zoom = !this.scope.zoom;
     }
 
     onUpdate() {
@@ -29,12 +52,68 @@ class LineGraph {
         var self = this;
         this.name = 'lineGraph';
         module.controller(this.name, [scopeName, elementName, LineGraphController]);
-        module.directive(this.name, function() {
+        module.directive(this.name, function () {
             return {
                 transclude: true,
+                templateUrl: '/systatus/components/lineGraph.html',
+                replace: true,
                 controller: self.name,
-                scope: {}
+                scope: {
+                    toggleZoom: '=?',
+                    toggleStart: '=?'
+                }
             };
         });
+    }
+}
+
+class ChartOptions {
+    //radius, xLines, yLines, yMin, yMax, yUnit
+    constructor(cfgObj) {
+        var self = this;
+        this.scales = {
+            xAxes: [{
+                gridLines: {
+                    display: false
+                }
+            }],
+            yAxes: [{
+                gridLines: {
+                    display: false
+                },
+                ticks: {}
+            }]
+        };
+        this.elements = {
+            point: {
+                radius: 0
+            }
+        };
+
+        if (cfgObj.radius) {
+            this.elements.point.radius = cfgObj.radius;
+        }
+        if (cfgObj.xLines) {
+            this.scales.xAxes.gridLines.display = true;
+        }
+        if (cfgObj.yLines) {
+            this.scales.yAxes.gridLines.display = true;
+        }
+        if (cfgObj.yMin !== undefined && typeof (cfgObj.yMin) === 'number') {
+            this.scales.yAxes[0].ticks.suggestedMin = cfgObj.yMin;
+        }
+        if (cfgObj.yMax !== undefined && typeof (cfgObj.yMax) === 'number') {
+            this.scales.yAxes[0].ticks.suggestedMax = cfgObj.yMax;
+        }
+        if (cfgObj.yUnit) {
+            this.scales.yAxes[0].ticks.callback = function (value, index, values) {
+                return value + cfgObj.yUnit;
+            };
+        }
+
+        this.animation = {
+            duration: 1000,
+            easing: 'linear'
+        }
     }
 }

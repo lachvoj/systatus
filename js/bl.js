@@ -23,6 +23,7 @@ window.onload = function () {
     new LineGraph(module);
     new Memory(module);
     new Temperature(module);
+    new Cpu(module);
 
     angular.bootstrap(document, [appName]);
 };

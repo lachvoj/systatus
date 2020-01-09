@@ -59,52 +59,6 @@ function getLineGraphColor(palleteIndex) {
     };
 }
 
-class ChartOptions {
-    //radius, xLines, yLines, yMin, yMax, yUnit
-    constructor(cfgObj) {
-        var self = this;
-        this.scales = {
-            xAxes: [{
-                gridLines: {
-                    display: false
-                }
-            }],
-            yAxes: [{
-                gridLines: {
-                    display: false
-                },
-                ticks: {}
-            }]
-        };
-        this.elements = {
-            point: {
-                radius: 0
-            }
-        };
-
-        if (cfgObj.radius) {
-            this.elements.point.radius = cfgObj.radius;
-        }
-        if (cfgObj.xLines) {
-            this.scales.xAxes.gridLines.display = true;
-        }
-        if (cfgObj.yLines) {
-            this.scales.yAxes.gridLines.display = true;
-        }
-        if (cfgObj.yMin !== undefined && typeof (cfgObj.yMin) === 'number') {
-            this.scales.yAxes[0].ticks.suggestedMin = cfgObj.yMin;
-        }
-        if (cfgObj.yMax !== undefined && typeof (cfgObj.yMax) === 'number') {
-            this.scales.yAxes[0].ticks.suggestedMax = cfgObj.yMax;
-        }
-        if (cfgObj.yUnit) {
-            this.scales.yAxes[0].ticks.callback = function (value, index, values) {
-                return value + cfgObj.yUnit;
-            };
-        }
-    }
-}
-
 class ControllerBase {
     constructor(name, scope, apiService, config) {
         this.scope = scope;
@@ -170,9 +124,7 @@ class CardBase {
                 templateUrl: '/systatus/components/' + templateName + '.html',
                 controller: self.name,
                 scope: {
-                    data: '@?',
-                    stop: '=?',
-                    start: '=?'
+                    data: '@?'
                 }
             };
         });

@@ -9,9 +9,9 @@ class Temperature extends CardBase {
 class TemperatureController extends ControllerBase {
     constructor(scope, apiService, config) {
         super('temperature', scope, apiService, config)
-        this.scope.chartOptions = new ChartOptions({
+        this.scope.chartOptions = {
             yUnit: '°C'
-        });
+        };
         this.start();
     }
 
@@ -29,7 +29,8 @@ class TemperatureController extends ControllerBase {
                     label: nm,
                     data: [],
                     borderColor: gc.borderColor,
-                    backgroundColor: gc.backgroundColor
+                    backgroundColor: gc.backgroundColor,
+                    borderWidth: 1
                 });
             }
         }

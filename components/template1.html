@@ -2,8 +2,8 @@
     <h5>{{upperName}}</h5>
 </div>
 <div class="card-body">
-    <div class="row">
-        <div class="col-md-3">
+    <div class="row align-items-center">
+        <div class="col-md-8">
             <table class="table table-sm small">
                 <tr ng-repeat="(key, val) in tableData">
                     <th>{{key}}</th>
@@ -11,16 +11,6 @@
                 </tr>
             </table>
         </div>
-        <div class="col-md-9">
-            <div class="row">
-                <canvas line-graph class="col-md-12"></canvas>
-            </div>
-            <div class="row">
-                <div class="col-md-12 clearfix">
-                    <button ng-if="(apiStop)" ng-click="start()" type="button" class="btn btn-success float-right">Start</button>
-                    <button ng-if="(!apiStop)" ng-click="stop()" type="button" class="btn btn-danger float-right">Stop</button>
-                </div>
-            </div>
-        </div>
+        <line-graph></line-graph>
     </div>
 </div>

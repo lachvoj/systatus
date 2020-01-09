@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 class Memory extends CardBase {
     constructor(module) {
@@ -9,17 +9,18 @@ class Memory extends CardBase {
 class MemoryController extends ControllerBase {
     constructor(scope, apiService, config) {
         super('memory', scope, apiService, config);
-        this.scope.chartOptions = new ChartOptions({
+        this.scope.chartOptions = {
             yMin: 0,
             yMax: 100,
             yUnit: '%'
-        });
+        };
         let gc = getLineGraphColor();
         this.scope.chartData.datasets.push({
             label: '% used',
             data: [],
             borderColor: gc.borderColor,
-            backgroundColor: gc.backgroundColor
+            backgroundColor: gc.backgroundColor,
+            borderWidth: 1
         });
         this.start();
     }

@@ -1,0 +1,15 @@
+<div ng-class="{'col-md-12': zoom, 'col-md-4': !zoom}">
+    <div class="row">
+        <canvas class="col-md-12"></canvas>
+    </div>
+    <div class="row">
+        <div class="col-md-12 clearfix">
+            <div class="btn-group btn-group-sm float-right">
+                <button ng-click="toggleZoom()" type="button"
+                    class="btn btn-primary">{{(zoom) ? '-' : '+'}}</button>
+                <button ng-click="toggleStart()" type="button" class="btn"
+                    ng-class="{'btn-success': $parent.apiStop, 'btn-danger': !$parent.apiStop}">{{($parent.apiStop) ? 'Start' : 'Stop'}}</button>
+            </div>
+        </div>
+    </div>
+</div>
