@@ -31,12 +31,13 @@ class MemoryController extends ControllerBase {
         }
 
         let labels = Object.keys(apiData.memory);
+        let td = this.scope.tableData.data;
         for (var i = 0; i < labels.length; i++) {
             if (labels[i] === "percent") {
-                this.scope.tableData[labels[i]] = apiData.memory[labels[i]] + '%';
+                td[labels[i]] = apiData.memory[labels[i]] + '%';
             }
             else {
-                this.scope.tableData[labels[i]] = bytesToHumanReadable(apiData.memory[labels[i]], true);
+                td[labels[i]] = bytesToHumanReadable(apiData.memory[labels[i]], true);
             }
         }
         this.scope.chartData.labels.push(getHHMMSSTimestamp());

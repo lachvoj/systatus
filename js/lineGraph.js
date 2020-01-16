@@ -1,3 +1,5 @@
+'use strict';
+
 class LineGraphController {
     constructor(scope, element, attrs) {
         var self = this;
@@ -10,7 +12,7 @@ class LineGraphController {
         if (!scope.$parent[chartDataName]) {
             return;
         }
-        this.scope.data = scope.$parent.chartData;
+        this.scope.data = scope.$parent[chartDataName];
 
         if (scope.$parent.chartOptions) {
             this.scope.options = new ChartOptions(scope.$parent.chartOptions);
@@ -50,7 +52,7 @@ class LineGraphController {
 class LineGraph {
     constructor(module) {
         var self = this;
-        this.name = 'lineGraph';
+        this.name = 'lg';
         module.controller(this.name, [scopeName, elementName, LineGraphController]);
         module.directive(this.name, function () {
             return {
@@ -68,7 +70,7 @@ class LineGraph {
 }
 
 class ChartOptions {
-    //radius, xLines, yLines, yMin, yMax, yUnit
+    //title, radius, xLines, yLines, yMin, yMax, yUnit
     constructor(cfgObj) {
         var self = this;
         this.scales = {
@@ -87,9 +89,18 @@ class ChartOptions {
         this.elements = {
             point: {
                 radius: 0
+            },
+            line: {
+                tension: 0.3
             }
         };
 
+        if (cfgObj.title) {
+            this.title = {
+                display: true,
+                text: cfgObj.title
+            };
+        }
         if (cfgObj.radius) {
             this.elements.point.radius = cfgObj.radius;
         }
@@ -114,6 +125,15 @@ class ChartOptions {
         this.animation = {
             duration: 1000,
             easing: 'linear'
-        }
+        };
+
+        this.legend  = {
+            position: 'left',
+            labels: {
+                boxWidth: 20,
+                fontSize: 10,
+                padding: 5
+            }
+        };
     }
 }

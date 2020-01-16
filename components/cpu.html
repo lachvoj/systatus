@@ -1,19 +1,11 @@
 <div class="card-header">
-    <h5>{{upperName}}</h5>
+    <h5>{{name}}</h5>
 </div>
 <div class="card-body">
     <div class="row align-items-center">
         <div class="col-md-8">
-            <table class="table table-sm small">
-                <tr>
-                    <th ng-repeat="item in tableData.header">{{item}}</th>
-                </tr>
-                <tr ng-repeat="(key, data) in tableData.data">
-                    <th>{{key}}</th>
-                    <td ng-repeat="val in data track by $index">{{val}}</td>
-                </tr>
-            </table>
+            <dt></dt>
         </div>
-        <line-graph></line-graph>
+        <lg></lg>
     </div>
 </div>

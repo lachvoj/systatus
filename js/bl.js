@@ -21,6 +21,7 @@ window.onload = function () {
     module.service(apiServiceName, ['$http', '$timeout', configName, ApiService]);
     module.service(configName, [Config]);
     new LineGraph(module);
+    new DataTable(module);
     new Memory(module);
     new Temperature(module);
     new Cpu(module);

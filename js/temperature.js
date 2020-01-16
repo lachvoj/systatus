@@ -53,7 +53,7 @@ class TemperatureController extends ControllerBase {
                 if (!nm || nm.length === 0) {
                     nm = labels[i] + j.toString();
                 }
-                this.scope.tableData[nm] = tItem.current;
+                this.scope.tableData.data[nm] = tItem.current;
                 this.scope.chartData.datasets[i + j].data.push(tItem.current);
             }
         }

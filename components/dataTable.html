@@ -1,0 +1,10 @@
+<table class="table table-sm small">
+    <tr ng-if="(table.header)">
+        <th ng-repeat="item in table.header">{{item}}</th>
+    </tr>
+    <tr ng-repeat="(key, dt) in table.data">
+        <th>{{key}}</th>
+        <td ng-if="isArray(dt)" ng-repeat="val in dt track by $index">{{val}}</td>
+        <td ng-if="!isArray(dt)">{{dt}}</td>
+    </tr>
+</table>

@@ -28,13 +28,14 @@ class CpuController extends ControllerBase {
                 borderWidth: 1
             });
         }
+        this.scope.tableData.header = apiData.cpu.times.header;
     }
 
     transformApiData(apiData) {
         if (!apiData.cpu)
             return;
 
-        this.scope.tableData = apiData.cpu.times;
+        this.scope.tableData.data = apiData.cpu.times.data;
 
         if (this.scope.chartData.datasets.length == 0)
             this.initializeDataset(apiData);

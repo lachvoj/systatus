@@ -32,10 +32,6 @@ function getHHMMSSTimestamp() {
     return (formatedHours + ":" + formatedMinutes + ":" + formatedSeconds);
 }
 
-function capitalizeFirst(str) {
-    return str[0].toUpperCase() + str.slice(1);
-}
-
 var graphColorPallete = [
     { r: 62, g: 150, b: 81 },
     { r: 204, g: 37, b: 41 },
@@ -63,12 +59,13 @@ class ControllerBase {
     constructor(name, scope, apiService, config) {
         this.scope = scope;
         this.scope.name = name;
-        this.scope.upperName = capitalizeFirst(name);
         this.options = {
             limit: config.limit
         };
         this.scope.apiStop = true;
-        this.scope.tableData = {};
+        this.scope.tableData = {
+            data: {}
+        };
         this.scope.chartData = {
             labels: [],
             datasets: []
@@ -114,8 +111,7 @@ class CardBase {
     constructor(name, templateName, module, controller) {
         var self = this;
         this.name = name;
-        this.upperName = capitalizeFirst(name);
-        angular.element(document.getElementById('navbar-items')).append('<li class="nav-item"><a class="nav-link" href="#' + this.name + '">' + this.upperName + '</a></li>');
+        angular.element(document.getElementById('navbar-items')).append('<li class="nav-item"><a class="nav-link text-capitalize" href="#' + this.name + '">' + this.name + '</a></li>');
         angular.element(document.getElementById('content')).append('<div ' + this.name + ' id="' + this.name + '" class="card"></div>');
         module.controller(this.name, [scopeName, apiServiceName, configName, controller]);
         module.directive(this.name, function () {
