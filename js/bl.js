@@ -22,8 +22,9 @@ window.onload = function () {
     module.service(configName, [Config]);
     new LineGraph(module);
     new DataTable(module);
+
     new Memory(module);
-    new Temperature(module);
+    // new Temperature(module);
     new Cpu(module);
 
     angular.bootstrap(document, [appName]);

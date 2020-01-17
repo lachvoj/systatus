@@ -77,13 +77,20 @@ class ChartOptions {
             xAxes: [{
                 gridLines: {
                     display: false
+                },
+                ticks: {
+                    fontSize: 10,
+                    minRotation: 90,
+                    maxRotation: 90
                 }
             }],
             yAxes: [{
                 gridLines: {
                     display: false
                 },
-                ticks: {}
+                ticks: {
+                    fontSize: 10
+                }
             }]
         };
         this.elements = {

@@ -5,19 +5,17 @@ import psutil
 import os
 import re
 
-data = {}
-data['cpu'] = {}
+data = {'cpu': {}}
 
 data['cpu']['count'] = psutil.cpu_count(logical=False)
 data['cpu']['countLogial'] = psutil.cpu_count(logical=True)
 
-data['cpu']['percent'] = psutil.cpu_percent(interval=0.3, percpu=True)
-
 temperatures = psutil.sensors_temperatures()
-if hasattr(temperatures, 'coretemp'):
-    data['cpu']['temperature'] = []
-    for val in psutil.sensors_temperatures()['coretemp']:
-        data['cpu']['temperature'].append(val.current)
+if 'coretemp' in temperatures:
+    temperatures = psutil.sensors_temperatures()['coretemp']
+    data['cpu']['temperature'] = {'data': {}, 'high': temperatures[0].high, 'critical': temperatures[0].critical}
+    for (key,val) in enumerate(temperatures):
+        data['cpu']['temperature']['data'][key] = val.current
 
 data['cpu']['times'] = {}
 timesOutput = re.sub(r'([0-1]?[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]\s*(PM|AM)*\s*', '', os.popen('mpstat -P ALL').read())
@@ -34,6 +32,26 @@ data['cpu']['times']['data'] = {}
 for i in range(1, len(timesOutput)):
     data['cpu']['times']['data'][timesOutput[i][0]] = []
     for j in range(1, len(timesOutput[0])):
-        data['cpu']['times']['data'][timesOutput[i][0]].append(float(timesOutput[i][j]))
+        data['cpu']['times']['data'][timesOutput[i][0]].append(float(timesOutput[i][j].replace(',', '.')))
+
+freq = psutil.cpu_freq()
+if hasattr(freq, '_asdict'):
+    data['cpu']['freq'] = {'data': {}}
+    allCpu = psutil.cpu_freq()
+    data['cpu']['freq']['min'] = allCpu.min
+    data['cpu']['freq']['max'] = allCpu.max
+    data['cpu']['freq']['data']['all'] = round(allCpu.current, 2)
+    for (key, val) in enumerate(psutil.cpu_freq(percpu=True)):
+        data['cpu']['freq']['data'][key] = round(val.current, 2)
+
+data['cpu']['stats'] = {}
+dictStats = psutil.cpu_stats()._asdict()
+for key in dictStats:
+    data['cpu']['stats'][key] = dictStats[key]
+
+data['cpu']['percent'] = {'data': {}}
+for (key, val) in enumerate(psutil.cpu_percent(interval=0.2, percpu=True)):
+    data['cpu']['percent']['data'][key] = val
+data['cpu']['percent']['data']['all'] = psutil.cpu_percent()
 
 print(json.dumps(data))
