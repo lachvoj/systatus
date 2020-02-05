@@ -1,10 +1,15 @@
-<table class="table table-sm small">
+<table class="table table-striped table-xs xsmall">
     <tr ng-if="(table.header)">
-        <th ng-repeat="item in table.header">{{item}}</th>
+        <th ng-repeat="item in table.header track by $index">{{item}}</th>
     </tr>
-    <tr ng-repeat="(key, dt) in table.data">
+    <tr ng-if="isArray(table.data) && isArray(table.data[0])" ng-repeat="dt in table.data track by $index">
+        <td ng-repeat="val in dt track by $index">{{val}}</td>
+    </tr>
+    <tr ng-if="isArray(table.data)">
+        <td ng-repeat="val in table.data track by $index">{{val}}</td>
+    </tr>
+    <tr ng-if="!isArray(table.data)" ng-repeat="(key, dt) in table.data track by key">
         <th>{{key}}</th>
-        <td ng-if="isArray(dt)" ng-repeat="val in dt track by $index">{{val}}</td>
-        <td ng-if="!isArray(dt)">{{dt}}</td>
+        <td ng-repeat="val in dt track by $index">{{val}}</td>
     </tr>
 </table>

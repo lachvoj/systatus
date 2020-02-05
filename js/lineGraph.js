@@ -80,8 +80,9 @@ class ChartOptions {
                 },
                 ticks: {
                     fontSize: 10,
-                    minRotation: 90,
-                    maxRotation: 90
+                    autoSkipPadding: 50,
+                    minRotation: 0,
+                    maxRotation: 0
                 }
             }],
             yAxes: [{

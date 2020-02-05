@@ -2,7 +2,7 @@
 
 class Cpu extends CardBase {
     constructor(module) {
-        super('cpu', 'cpu', module, CpuController);
+        super('cpu', 'template2', module, CpuController);
     }
 }
 
@@ -34,7 +34,7 @@ class CpuController extends ControllerBase {
             this.scope.tableData.header.push('temperature')
         }
         if (apiData.cpu.freq) {
-            this.scope.tableData.header.push('freq')
+            this.scope.tableData.header.push('frequency')
         }
         if (apiData.cpu.percent) {
             this.scope.tableData.header.push('percent')
