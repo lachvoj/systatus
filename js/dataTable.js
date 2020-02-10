@@ -1,15 +1,12 @@
 'use strict';
 
 class DataTableController {
-    constructor(scope, element, attrs) {
-        var self = this;
+    constructor(scope, attrs) {
         this.scope = scope;
 
-        let dataTableDataName = element.attr('table-data');
-        if (!dataTableDataName || !scope.$parent[dataTableDataName]) {
-            dataTableDataName = 'tableData';
-        }
+        let dataTableDataName = attrs.tableData || 'table';
         if (!scope.$parent[dataTableDataName]) {
+            console.warn('Data table no data named: ' + dataTableDataName + ' in parent scope.');
             return;
         }
         this.scope.table = scope.$parent[dataTableDataName];
@@ -27,7 +24,7 @@ class DataTable {
     constructor(module) {
         var self = this;
         this.name = 'dt';
-        module.controller(this.name, [scopeName, elementName, DataTableController]);
+        module.controller(this.name, [scopeName, attrsName, DataTableController]);
         module.directive(this.name, function() {
             return {
                 transclude: true,

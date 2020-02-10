@@ -4,11 +4,10 @@
     </div>
     <div class="row">
         <div class="col-md-12 clearfix">
-            <div class="btn-group btn-group-sm float-right">
-                <button ng-click="toggleZoom()" ng-class="{'bg-icon-zoom-out': zoom, 'bg-icon-zoom-in': !zoom}" type="button"
-                    class="btn btn-primary bg-icon"> </button>
-                <button ng-click="toggleStart()" type="button" class="btn"
-                    ng-class="{'btn-success': $parent.apiStop, 'btn-danger': !$parent.apiStop}">{{($parent.apiStop) ? 'Start' : 'Stop'}}</button>
+            <div class="btn-group btn-group-xs float-right">
+                <button ng-click="toggleZoom()" type="button" class="btn btn-primary btn-xs">
+                    <span class="bg-icon" ng-class="{'bg-icon-zoom-out': zoom, 'bg-icon-zoom-in': !zoom}"></span>
+                </button>
             </div>
         </div>
     </div>

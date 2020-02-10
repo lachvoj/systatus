@@ -9,13 +9,15 @@
   <link rel="stylesheet" href="css/style.css">
 
   <script src="js/angular.min.js"></script>
+  <script src="js/angular-animate.min.js"></script>
   <script src="js/Chart.min.js"></script>
+  <script src="js/navBar.js"></script>
+  <script src="js/card.js"></script>
   <script src="js/lineGraph.js"></script>
   <script src="js/dataTable.js"></script>
   <script src="js/ApiService.js"></script>
   <script src="js/utils.js"></script>
   <script src="js/memory.js"></script>
-  <script src="js/temperature.js"></script>
   <script src="js/cpu.js"></script>
   <script src="js/bl.js"></script>
 
@@ -23,11 +25,10 @@
 </head>
 
 <body>
-  <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
-    <ul id="navbar-items" class="navbar-nav mr-auto">
-    </ul>
-  </nav>
+  <nb></nb>
   <div id="content">
+    <crd card-name="Memory"></crd>
+    <crd card-name="cpu"></crd>
   </div>
 </body>
 

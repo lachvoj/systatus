@@ -14,10 +14,10 @@ class ApiService {
         tick = function() {
             for (let i = 0; i < self.registeredEndpoints.length; i++) {
                 let re = self.registeredEndpoints[i];
-                if (re.scope.apiStop === true) continue;
+                if (re.scope.apiStart === false) continue;
                 self.http({
                     method: 'POST',
-                    url: '/systatus/api/' + re.scope.name
+                    url: '/systatus/api/' + re.scope.name.toLowerCase()
                 }).then(re.successCB, re.errorCB);
             }
             setTimeout();

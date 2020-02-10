@@ -34,15 +34,15 @@ for i in range(1, len(timesOutput)):
     for j in range(1, len(timesOutput[0])):
         data['cpu']['times']['data'][timesOutput[i][0]].append(float(timesOutput[i][j].replace(',', '.')))
 
-freq = psutil.cpu_freq()
-if hasattr(freq, '_asdict'):
-    data['cpu']['freq'] = {'data': {}}
+frequency = psutil.cpu_freq()
+if hasattr(frequency, '_asdict'):
+    data['cpu']['frequency'] = {'data': {}}
     allCpu = psutil.cpu_freq()
-    data['cpu']['freq']['min'] = allCpu.min
-    data['cpu']['freq']['max'] = allCpu.max
-    data['cpu']['freq']['data']['all'] = round(allCpu.current, 2)
+    data['cpu']['frequency']['min'] = allCpu.min
+    data['cpu']['frequency']['max'] = allCpu.max
+    data['cpu']['frequency']['data']['all'] = round(allCpu.current, 2)
     for (key, val) in enumerate(psutil.cpu_freq(percpu=True)):
-        data['cpu']['freq']['data'][key] = round(val.current, 2)
+        data['cpu']['frequency']['data'][key] = round(val.current, 2)
 
 data['cpu']['stats'] = {}
 dictStats = psutil.cpu_stats()._asdict()

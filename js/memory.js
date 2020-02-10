@@ -1,34 +1,40 @@
 'use strict';
 
-class Memory extends CardBase {
-    constructor(module) {
-        super ('memory', 'template2', module, MemoryController);
-    }
-}
+class Memory {
+    constructor(table, charts) {
+        var self = this;
 
-class MemoryController extends ControllerBase {
-    constructor(scope, apiService, config) {
-        super('memory', scope, apiService, config);
-        this.scope.tableData.header = [];
-        this.scope.tableData.data = [];
-        this.scope.chartOptions = {
-            yMin: 0,
-            yMax: 100,
-            yUnit: '%'
-        };
+        this.table = table;
+        table.header = [];
+        table.data = [];
+
+        this.charts = charts;
         let gc = getLineGraphColor();
-        this.scope.chartData.datasets.push({
-            label: '% used',
-            data: [],
-            borderColor: gc.borderColor,
-            backgroundColor: gc.backgroundColor,
-            borderWidth: 1
-        });
-        this.start();
+        this.chartsData = {
+            percent:{
+                datasets: [{
+                    label: '% used',
+                    data: [],
+                    borderColor: gc.borderColor,
+                    backgroundColor: gc.backgroundColor,
+                    borderWidth: 1
+                }],
+                labels: [],
+            }
+        };
+        charts.main = {
+            options: {
+                yMin: 0,
+                yMax: 100,
+                yUnit: '%'
+            },
+            datasets: self.chartsData.percent.datasets,
+            labels: self.chartsData.percent.labels
+        };
     }
 
     setupTableHeader(apiData) {
-        this.scope.tableData.header = Object.keys(apiData.memory);
+        this.table.header = Object.keys(apiData.memory);
     }
 
     transformApiData(apiData) {
@@ -36,13 +42,12 @@ class MemoryController extends ControllerBase {
             return;
         }
 
-        if (this.scope.tableData.header.length == 0) {
+        if (this.table.header.length == 0) {
             this.setupTableHeader(apiData);
         }
 
-        this.scope.tableData.data = [];
-        let labels = Object.keys(apiData.memory);
-        let td = this.scope.tableData.data;
+        let labels = this.table.header;
+        let td = [];
         for (var i = 0; i < labels.length; i++) {
             if (labels[i] === "percent") {
                 td.push(apiData.memory[labels[i]] + '%');
@@ -50,10 +55,12 @@ class MemoryController extends ControllerBase {
             else {
                 td.push(bytesToHumanReadable(apiData.memory[labels[i]], true));
             }
+            let chd = this.chartsData[labels[i]];
+            if (chd) {
+                chd.labels.push(getHHMMSSTimestamp());
+                chd.datasets[0].data.push(apiData.memory[labels[i]]);
+            }
         }
-        this.scope.chartData.labels.push(getHHMMSSTimestamp());
-        this.scope.chartData.datasets[0].data.push(apiData.memory['percent']);
-
-        super.transformApiData();
+        this.table.data = td;
     }
 }

@@ -5,17 +5,15 @@ class LineGraphController {
         var self = this;
         this.scope = scope;
 
-        let chartDataName = element.attr('chart-data');
-        if (!chartDataName || !scope.$parent[chartDataName]) {
-            chartDataName = 'chartData';
-        }
-        if (!scope.$parent[chartDataName]) {
+        let chartDataName = attrs.chartData || 'main';
+        if (!scope.$parent.charts[chartDataName]) {
+            console.warn('Chart no data named: ' + chartDataName + ' in parent scope.');
             return;
         }
-        this.scope.data = scope.$parent[chartDataName];
+        this.scope.data = scope.$parent.charts[chartDataName];
 
-        if (scope.$parent.chartOptions) {
-            this.scope.options = new ChartOptions(scope.$parent.chartOptions);
+        if (this.scope.data.options) {
+            this.scope.options = new ChartOptions(scope.$parent.charts[chartDataName].options);
         }
         else {
             this.scope.options = new ChartOptions({});
@@ -29,15 +27,12 @@ class LineGraphController {
             data: scope.data,
             options: scope.options
         });
+        
         this.scope.$watchCollection('data.labels', function () {
             self.onUpdate();
         });
-        this.scope.toggleStart = this.toggleStart.bind(this);
-        this.scope.toggleZoom = this.toggleZoom.bind(this);
-    }
 
-    toggleStart() {
-        this.scope.$parent.apiStop = !this.scope.$parent.apiStop;
+        this.scope.toggleZoom = this.toggleZoom.bind(this);
     }
 
     toggleZoom() {
@@ -53,7 +48,7 @@ class LineGraph {
     constructor(module) {
         var self = this;
         this.name = 'lg';
-        module.controller(this.name, [scopeName, elementName, LineGraphController]);
+        module.controller(this.name, [scopeName, elementName, attrsName, LineGraphController]);
         module.directive(this.name, function () {
             return {
                 transclude: true,

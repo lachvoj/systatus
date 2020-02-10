@@ -1,11 +1,41 @@
-<div class="card-header card-header-xs">
-    <h5 class="text-capitalize">{{name}}</h5>
-</div>
-<div class="card-body card-body-xs">
-    <div id="graphs" class="row align-items-center">
-        <div class="col-md-8 table-responsive">
-            <dt></dt>
+<div ng-attr-id="{{name}}" class="card">
+    <div class="card-header card-header-xs">
+        <h5 class="text-capitalize">{{name}}
+            <div class="btn-group btn-group-xs">
+                <button type="button" ng-click="toggleApiStart()" class="btn btn-xs"
+                    ng-class="{'btn-success': !apiStart, 'btn-danger': apiStart}">
+                    <span class="bg-icon"
+                        ng-class="{'bg-icon-media-play': !apiStart, 'bg-icon-media-stop': apiStart}"></span>
+                </button>
+                <button type="button" ng-click="requestOnce()" class="btn btn-primary btn-xs">
+                    <b>1</b>
+                </button>
+            </div>
+        </h5>
+    </div>
+    <div class="card-body card-body-xs">
+        <div class="row align-items-center">
+            <div class="col-md-12 table-responsive">
+                <dt></dt>
+            </div>
         </div>
-        <lg></lg>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="btn-group btn-group-xs float-left">
+                    <button type="button" ng-click="toggleGraphArea()" class="btn btn-primary btn-xs">
+                        <span class="bg-icon"
+                            ng-class="{'bg-icon-chevron-top': showGraphs, 'bg-icon-chevron-bottom': !showGraphs}"></span>
+                        <span class="ml-1">
+                            <span ng-show='showGraphs'>Hide</span>
+                            <span ng-hide='showGraphs'>Show</span>
+                            charts
+                        </span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div id="graphs" class="row align-items-center ng-slide-v" ng-show="showGraphs">
+            <lg></lg>
+        </div>
     </div>
 </div>
