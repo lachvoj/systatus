@@ -35,7 +35,7 @@
             </div>
         </div>
         <div id="graphs" class="row align-items-center ng-slide-v" ng-show="showGraphs">
-            <lg></lg>
+            <lg ng-repeat="(chartDataName, val) in charts"></lg>
         </div>
     </div>
 </div>

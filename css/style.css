@@ -94,3 +94,8 @@
     -webkit-mask-image: url('../assets/media-record.svg');
     mask-image: url('../assets/media-record.svg');
 }
+
+.bg-icon-graph::before {
+    -webkit-mask-image: url('../assets/graph.svg');
+    mask-image: url('../assets/graph.svg');
+}

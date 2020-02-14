@@ -4,19 +4,24 @@ class LineGraphController {
     constructor(scope, element, attrs) {
         var self = this;
         this.scope = scope;
+        this.datasetsInitialized = false;
 
-        let chartDataName = attrs.chartData || 'main';
+        let chartDataName = attrs.chartData || scope.$parent.chartDataName || 'main';
         if (!scope.$parent.charts[chartDataName]) {
             console.warn('Chart no data named: ' + chartDataName + ' in parent scope.');
             return;
         }
         this.scope.data = scope.$parent.charts[chartDataName];
+        this.chartData = {
+            labels: self.scope.data.labels,
+            datasets: []
+        };
 
         if (this.scope.data.options) {
-            this.scope.options = new ChartOptions(scope.$parent.charts[chartDataName].options);
+            this.options = new ChartOptions(scope.$parent.charts[chartDataName].options);
         }
         else {
-            this.scope.options = new ChartOptions({});
+            this.options = new ChartOptions({});
         }
 
         this.scope.zoom = false;
@@ -24,8 +29,8 @@ class LineGraphController {
         this.ctx = element.find('canvas')[0].getContext('2d');
         this.chart = new Chart(this.ctx, {
             type: 'line',
-            data: scope.data,
-            options: scope.options
+            data: self.chartData,
+            options: self.options
         });
         
         this.scope.$watchCollection('data.labels', function () {
@@ -40,7 +45,48 @@ class LineGraphController {
     }
 
     onUpdate() {
+        this.checkDatasetConsistency();
         this.chart.update();
+    }
+
+    checkDatasetConsistency() {
+        let dt = this.scope.data.data;
+
+        if (!angular.isArray(dt)) {
+            console.warn('Charts data are not array!');
+            return;
+        }
+
+        if (dt.length === 0)
+            return;
+
+        let ds = this.chartData.datasets;
+        if (!angular.isArray(dt[0]) && ds.length === 0) {
+            this.addDataset(dt, this.scope.data.dataNames);
+            return;
+        }
+
+        if (!angular.isArray(dt[0]) || (ds.length === dt.length)) {
+            return;
+        }
+        
+        ds = [];
+        for (let i = 0; i < dt.length; i++) {
+            this.addDataset(dt[i], this.scope.data.dataNames[i], i);
+        }
+    }
+
+    addDataset(data, label, index) {
+        var self = this;
+        let gc = getLineGraphColor(index || 0);
+
+        this.chartData.datasets.push({
+            label: label,
+            data: data,
+            borderColor: gc.borderColor,
+            backgroundColor: gc.backgroundColor,
+            borderWidth: 1
+        });
     }
 }
 
@@ -58,7 +104,8 @@ class LineGraph {
                 scope: {
                     toggleZoom: '=?',
                     toggleStart: '=?'
-                }
+                },
+                // template: '<div ng-class="{\'col-md-12\': zoom, \'col-md-4\': !zoom}"><div class="row"><canvas class="col-md-12"></canvas></div><div class="row"><div class="col-md-12 clearfix"><div class="btn-group btn-group-xs float-right"><button ng-click="toggleZoom()" type="button" class="btn btn-primary btn-xs"><span class="bg-icon" ng-class="{\'bg-icon-zoom-out\': zoom, \'bg-icon-zoom-in\': !zoom}"></span></button></div></div></div></div>'
             };
         });
     }

@@ -54,3 +54,17 @@ function getLineGraphColor(palleteIndex) {
         backgroundColor: 'rgba(' + cp[pi].r + ',' + cp[pi].g + ',' + cp[pi].b + ',0.1)'
     };
 }
+
+class DataProvider {
+    constructor() {
+        this.chartsData = {};
+        this.chartsDataNames = {};
+    }
+
+    registerChartData(itemName) {
+        this.chartsData[itemName] = [];
+        this.chartsDataNames[itemName] = [];
+        if (!this.chartsLabels)
+            this.chartsLabels = [];
+    }
+}

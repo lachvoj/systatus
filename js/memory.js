@@ -1,7 +1,8 @@
 'use strict';
 
-class Memory {
+class Memory extends DataProvider {
     constructor(table, charts) {
+        super();
         var self = this;
 
         this.table = table;
@@ -9,27 +10,16 @@ class Memory {
         table.data = [];
 
         this.charts = charts;
-        let gc = getLineGraphColor();
-        this.chartsData = {
-            percent:{
-                datasets: [{
-                    label: '% used',
-                    data: [],
-                    borderColor: gc.borderColor,
-                    backgroundColor: gc.backgroundColor,
-                    borderWidth: 1
-                }],
-                labels: [],
-            }
-        };
+        this.registerChartData('percent');
         charts.main = {
             options: {
                 yMin: 0,
                 yMax: 100,
                 yUnit: '%'
             },
-            datasets: self.chartsData.percent.datasets,
-            labels: self.chartsData.percent.labels
+            dataNames: 'used %',
+            data: self.chartsData.percent,
+            labels: self.chartsLabels
         };
     }
 
@@ -48,6 +38,7 @@ class Memory {
 
         let labels = this.table.header;
         let td = [];
+        let pushTimestamp = false;
         for (var i = 0; i < labels.length; i++) {
             if (labels[i] === "percent") {
                 td.push(apiData.memory[labels[i]] + '%');
@@ -57,10 +48,13 @@ class Memory {
             }
             let chd = this.chartsData[labels[i]];
             if (chd) {
-                chd.labels.push(getHHMMSSTimestamp());
-                chd.datasets[0].data.push(apiData.memory[labels[i]]);
+                pushTimestamp = true;
+                chd.push(apiData.memory[labels[i]]);
             }
         }
+        if (pushTimestamp)
+            this.chartsLabels.push(getHHMMSSTimestamp());
+
         this.table.data = td;
     }
 }

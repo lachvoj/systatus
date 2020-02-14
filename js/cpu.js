@@ -1,7 +1,8 @@
 'use strict';
 
-class Cpu {
+class Cpu extends DataProvider {
     constructor(table, charts) {
+        super();
         var self = this;
 
         this.table = table;
@@ -9,20 +10,16 @@ class Cpu {
         table.data = {};
 
         this.charts = charts;
-        this.chartsData = {
-            percent: {
-                datasets: [],
-                labels: []
-            }
-        };
+        this.registerChartData('percent');
         charts.main = {
             options: {
                 yMin: 0,
                 yMax: 100,
                 yUnit: '%'
             },
-            datasets: self.chartsData.percent.datasets,
-            labels: self.chartsData.percent.labels
+            dataNames: self.chartsDataNames.percent,
+            data: self.chartsData.percent,
+            labels: self.chartsLabels
         };
     }
 
@@ -43,9 +40,10 @@ class Cpu {
         if (cpuData.percent)
             this.addElementsToData(data, cpuData.percent.data);
         this.table.data = data;
-        
+
         let chdk = Object.keys(this.chartsData);
         let dtk = Object.keys(cpuData.times.data);
+        let pushTimestamp = false;
         for (let i = 0; i < chdk.length; i++) {
             let indx;
             let chd = this.chartsData[chdk[i]];
@@ -57,14 +55,16 @@ class Cpu {
             else
                 continue;
 
-            for (let j = 0; j < chd.datasets.length; j++) {
+            for (let j = 0; j < chd.length; j++) {
                 let pushDt = dt[dtk[j]];
-                if (dt.constructor === Array)
+                if (angular.isArray(dt))
                     pushDt = pushDt[indx];
-                chd.datasets[j].data.push(pushDt);
+                chd[j].push(pushDt);
             }
-            chd.labels.push(getHHMMSSTimestamp());
+            pushTimestamp = true;
         }
+        if (pushTimestamp)
+            this.chartsLabels.push(getHHMMSSTimestamp());
     }
 
     addElementsToData(data, elements) {
@@ -95,13 +95,8 @@ class Cpu {
 
             for (let j = 0; j < keys.length; j++) {
                 let gc = getLineGraphColor(j);
-                this.chartsData[chdk[i]].datasets.push({
-                    label: keys[j],
-                    data: [],
-                    borderColor: gc.borderColor,
-                    backgroundColor: gc.backgroundColor,
-                    borderWidth: 1
-                });
+                this.chartsData[chdk[i]].push([]);
+                this.chartsDataNames[chdk[i]].push(keys[j]);
             }
         }
     }

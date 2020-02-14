@@ -7,10 +7,10 @@ class CardController {
 
         this.config = config;
         this.scope.name = attrs.cardName;
+        mainMenu.items.push(this.scope.name);
         this.scope.callApiOnce = true;
         this.scope.apiStart = true;
         this.scope.showGraphs = false;
-        mainMenu.items.push(this.scope.name);
 
         this.initDataContainers(scope);
         this.initDataProvider(scope);
@@ -82,11 +82,15 @@ class CardController {
 
             if (chd.labels.length <= this.config.limit)
                 continue;
-            
+
             let toRemoveItemsCount = chd.labels.length - this.config.limit;
             chd.labels.splice(0, toRemoveItemsCount);
-            for (let j = 0; j < chd.datasets.length; j++) {
-                chd.datasets[i].data.splice(0, toRemoveItemsCount);
+            if (!angular.isArray(chd.data[0]))
+                chd.data.splice(0, toRemoveItemsCount);
+            else {
+                for (let j = 0; j < chd.data.length; j++) {
+                    chd.data[j].splice(0, toRemoveItemsCount);
+                }
             }
         }
     }
@@ -97,7 +101,7 @@ class Card {
         var self = this;
         this.name = 'crd';
         module.controller(this.name, [scopeName, attrsName, apiServiceName, configName, mainMenuName, CardController]);
-        module.directive(this.name, function() {
+        module.directive(this.name, function () {
             return {
                 restrict: 'E',
                 replace: true,
@@ -107,7 +111,7 @@ class Card {
                     requestOnce: '=?'
                 },
                 templateUrl: function (elem, attr) {
-                    let templateName = attr.template || 'template1';
+                    let templateName = attr.template || 'card';
                     return '/systatus/components/' + templateName + '.html';
                 }
             };
